@@ -3,7 +3,7 @@ import 'package:flutter_login/src/block/provider.dart';
 import 'package:flutter_login/src/services/user_service.dart';
 import 'package:flutter_login/src/utils/utils.dart' as utils;
 
-class LoginPage extends StatelessWidget {
+class RegistryPage extends StatelessWidget {
   final userService = new UserService();
 
   @override
@@ -12,13 +12,13 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           _createBackground(context),
-          _loginForm(context),
+          _registryForm(context),
         ],
       ),
     );
   }
 
-  Widget _loginForm(BuildContext context) {
+  Widget _registryForm(BuildContext context) {
     //este bloc es una unica instancia gracias a mi metodo of
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
@@ -48,7 +48,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  'ingreso',
+                  'Crear Cuenta',
                   style: TextStyle(fontSize: 20.0),
                 ),
                 SizedBox(
@@ -66,11 +66,9 @@ class LoginPage extends StatelessWidget {
               ],
             ),
           ),
-          //FlatButton es un boton plano con cero elevacion
           FlatButton(
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, 'registry'),
-              child: Text('Crear una nueva cuenta')),
+              onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+              child: Text('ya posees cuenta?')),
           SizedBox(
             height: 80.0,
           )
@@ -108,7 +106,8 @@ class LoginPage extends StatelessWidget {
         stream: bloc.formValidateStream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return RaisedButton(
-            onPressed: (snapshot.hasData) ? () => _login(bloc, context) : null,
+            onPressed:
+                (snapshot.hasData) ? () => _registry(bloc, context) : null,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 60.0, vertical: 10.0),
               child: Text('Ingresar'),
@@ -123,9 +122,9 @@ class LoginPage extends StatelessWidget {
   }
 
 //metodo se ejecuta cuando tiene informacion correcta en los campos email y password
-  _login(LoginBloc bloc, BuildContext context) async {
+  _registry(LoginBloc bloc, BuildContext context) async {
     Map info =
-        await userService.login(bloc.lastValueEmail, bloc.lastValuePassword);
+        await userService.newUser(bloc.lastValueEmail, bloc.lastValuePassword);
     if (info['OK']) {
       //pushReplacementNamed esta pagina va hacer mi nuevo root
       Navigator.pushReplacementNamed(context, 'home', arguments: bloc);

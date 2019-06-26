@@ -15,7 +15,7 @@ class LoginBloc with Validators {
   final _passwordController = BehaviorSubject<String>();
 
   //optener el ultimo valor emitido
-  String get lastValueEmail => _emailController.value;
+  String get lastValueEmail => _emailController.value.trim();
   String get lastValuePassword => _passwordController.value;
 
   //get y set
